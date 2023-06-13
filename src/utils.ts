@@ -96,32 +96,6 @@ export async function airdropSolIfNeeded(publicKey: PublicKey) {
   }
 }
 
-export async function transferSolIfNeeded(sender: Keypair, receiver: Keypair) {
-  const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
-
-  const balance = await connection.getBalance(receiver.publicKey)
-  console.log("Current balance is", balance / LAMPORTS_PER_SOL)
-
-  if (balance < 0.5 * LAMPORTS_PER_SOL) {
-    try {
-      let ix = SystemProgram.transfer({
-        fromPubkey: sender.publicKey,
-        toPubkey: receiver.publicKey,
-        lamports: LAMPORTS_PER_SOL,
-      })
-
-      await sendAndConfirmTransaction(connection, new Transaction().add(ix), [
-        sender,
-      ])
-
-      const newBalance = await connection.getBalance(receiver.publicKey)
-      console.log("New balance is", newBalance / LAMPORTS_PER_SOL)
-    } catch (e) {
-      console.log("SOL Transfer Unsuccessful")
-    }
-  }
-}
-
 export async function heliusApi(method, params) {
   const response = await fetch(process.env.RPC_URL, {
     method: "POST",
