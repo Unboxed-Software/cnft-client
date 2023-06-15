@@ -9,11 +9,7 @@ import {
 import * as fs from "fs"
 import fetch from "node-fetch"
 import dotenv from "dotenv"
-import {
-  SystemProgram,
-  Transaction,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js"
+
 import {
   SPL_NOOP_PROGRAM_ID,
   deserializeChangeLogEventV1,
@@ -62,6 +58,7 @@ export async function getOrCreateKeypair(walletName: string): Promise<Keypair> {
   return keypair
 }
 
+// Request an airdrop if the balance is below 1 SOL
 export async function airdropSolIfNeeded(publicKey: PublicKey) {
   const connection = new Connection(clusterApiUrl("devnet"), "confirmed")
 
@@ -96,6 +93,7 @@ export async function airdropSolIfNeeded(publicKey: PublicKey) {
   }
 }
 
+// Use for Helius Digital Asset Standard (DAS) API to fetch data for compressed NFTs and tree proofs
 export async function heliusApi(method, params) {
   const response = await fetch(process.env.RPC_URL, {
     method: "POST",
@@ -111,6 +109,7 @@ export async function heliusApi(method, params) {
   return result
 }
 
+// Create a compressed NFT metadata object
 export function createCompressedNFTMetadata(creatorPublicKey: PublicKey) {
   // Select a random URI from uris
   const randomUri = uris[Math.floor(Math.random() * uris.length)]
@@ -134,6 +133,7 @@ export function createCompressedNFTMetadata(creatorPublicKey: PublicKey) {
   return compressedNFTMetadata
 }
 
+// Use transaction signature to get the assetId of a compressed NFT immediately after minting
 export async function extractAssetId(
   connection: Connection,
   txSignature: string,

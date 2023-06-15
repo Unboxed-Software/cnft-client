@@ -36,6 +36,7 @@ async function main() {
   const wallet = await getOrCreateKeypair("Wallet_1")
   airdropSolIfNeeded(wallet.publicKey)
 
+  // Create a regular collection NFT
   const collectionNft = await createCollectionNFT(connection, wallet)
 
   const maxDepthSizePair: ValidDepthSizePair = {
@@ -45,6 +46,7 @@ async function main() {
 
   const canopyDepth = 0
 
+  // Create a tree account
   const treeAddress = await createTree(
     connection,
     wallet,
@@ -52,15 +54,17 @@ async function main() {
     canopyDepth
   )
 
+  // Mint compressed NFTs to the tree as part of the collection
   await mintCompressedNFTtoCollection(
     connection,
     wallet,
     treeAddress,
     collectionNft,
-    2 ** maxDepthSizePair.maxDepth
+    2 ** maxDepthSizePair.maxDepth // amount of NFTs to mint, 2^maxDepth = max leaf nodes in the tree
   )
 }
 
+// Create a regular collection NFT
 async function createCollectionNFT(connection: Connection, payer: Keypair) {
   // Create Metaplex instance using payer as identity
   const metaplex = new Metaplex(connection).use(keypairIdentity(payer))
@@ -84,6 +88,7 @@ async function createCollectionNFT(connection: Connection, payer: Keypair) {
   return collectionNft
 }
 
+// Create a tree account
 async function createTree(
   connection: Connection,
   payer: Keypair,
@@ -147,6 +152,7 @@ async function createTree(
   }
 }
 
+// Mint compressed NFTs to the tree as part of the collection
 async function mintCompressedNFTtoCollection(
   connection: Connection,
   payer: Keypair,
