@@ -10,11 +10,6 @@ import * as fs from "fs"
 import fetch from "node-fetch"
 import dotenv from "dotenv"
 import {
-  SystemProgram,
-  Transaction,
-  sendAndConfirmTransaction,
-} from "@solana/web3.js"
-import {
   SPL_NOOP_PROGRAM_ID,
   deserializeChangeLogEventV1,
 } from "@solana/spl-account-compression"
